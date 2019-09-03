@@ -1,0 +1,14 @@
+version: "3.4"
+services:
+  mqtt:
+    image: eclipse-mosquitto:latest
+    container_name: mqtt
+    restart: always
+    expose:
+      - 1883
+    ports:
+      - "1883:1883"
+    volumes:
+      - /opt/conf/mqtt/data:/mosquitto/data
+      - /opt/conf/mqtt/log:/mosquitto/log
+
