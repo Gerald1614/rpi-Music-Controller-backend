@@ -5,6 +5,7 @@ import json
 import logging
 import paho.mqtt.client as mqtt
 import pychromecast
+from channels import channels
 
 global cast
 cast = pychromecast.Chromecast('192.168.2.17')
@@ -25,7 +26,7 @@ mc = cast.media_controller
 
 def cc_action(payload):
     if payload["action"] == "play":
-        mc.play_media((payload["channel"]), "audio/mp3")
+        mc.play_media(channels[payload["channel"]], "audio/mp3")
         time.sleep(2)
         mc.play()
         print("=> Playing {0}" .format(cast.media_controller.status.content_id))
@@ -42,12 +43,6 @@ def cc_action(payload):
         print("=> Sending quit_app command")
         cast.quit_app()
 
-#hostname
-broker='localhost'
-#port
-port=1883
-#time to live
-timelive=60
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code " + str(rc))
@@ -69,5 +64,5 @@ client.on_connect = on_connect
 client.on_message = on_message
 client.on_subscribe = on_subscribe
 
-client.connect(broker, port, timelive)
+client.connect("mqtt", 1883, 60)
 client.loop_forever()

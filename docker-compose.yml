@@ -12,3 +12,23 @@ services:
       - /opt/conf/mqtt/data:/mosquitto/data
       - /opt/conf/mqtt/log:/mosquitto/log
 
+  audio_server:
+    container_name: audio_server
+    restart: always
+    command: python -u ./tuneIn.py
+    build: ./rpi_audio
+    # network_mode: host
+    depends_on:
+      - mqtt
+    links:
+      - mqtt
+
+  audio_client:
+    container_name: audio_client
+    restart: always
+    command: yarn start
+    build: ../rpi_client_audio
+    depends_on:
+      - audio_server
+    links:
+      - mqtt
