@@ -5,7 +5,6 @@ import json
 import logging
 import paho.mqtt.client as mqtt
 import pychromecast
-from channels import channels
 
 global cast
 cast = pychromecast.Chromecast('192.168.2.17')
@@ -26,13 +25,13 @@ mc = cast.media_controller
 
 def cc_action(payload):
     if payload["action"] == "play":
-        mc.play_media(channels[payload["channel"]], "audio/mp3")
+        mc.play_media(payload["desc"], "audio/mp3")
         time.sleep(2)
         mc.play()
-        print("=> Playing {0}" .format(cast.media_controller.status.content_id))
+        print("=> Playing {0}" .format(cast.media_controller.status))
     elif payload["action"] == "volume":
-        print("=> Change volume to "+ str(payload["channel"]))
-        cast.set_volume(payload["channel"])
+        print("=> Change volume to "+ str(payload["desc"]))
+        cast.set_volume(payload["desc"])
     elif payload["action"] == "pause":
         print("=> Sending pause command")
         mc.pause()
@@ -52,7 +51,6 @@ def on_message(client, userdata, msg):
     if str(msg.topic) == 'radio_action':
         payload = json.loads(msg.payload)
         cc_action(payload)
-        print("payload: " + payload["channel"])
 
 def on_subscribe(client, userdata, mid, granted_qos):
  print("Subscribed to Topic: " + 
