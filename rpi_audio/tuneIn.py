@@ -38,9 +38,9 @@ def cc_action(payload):
     elif payload["action"] == "stop":
         print("=> Sending stop command")
         mc.stop()
-    elif payload["action"] == "quit":
-        print("=> Sending quit_app command")
-        cast.quit_app()
+    # elif payload["action"] == "quit":
+    #     print("=> Sending quit_app command")
+    #     cast.quit_app()
 
 
 def on_connect(client, userdata, flags, rc):

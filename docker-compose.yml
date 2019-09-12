@@ -15,8 +15,8 @@ services:
   audio_server:
     container_name: audio_server
     restart: always
-    command: python -u ./tuneIn.py
     build: ./rpi_audio
+    command: python -u ./tuneIn.py
     # network_mode: host
     depends_on:
       - mqtt
@@ -24,11 +24,21 @@ services:
       - mqtt
 
   audio_client:
+    privileged: true
     container_name: audio_client
     restart: always
     command: yarn start
     build: ../rpi_client_audio
+    ports:
+      - "5000:5000"
+    volumes:
+      - app-volume:/usr/app/appdata
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/usr/app/MyProject59764-56e9a84a15e8.json
     depends_on:
       - audio_server
     links:
       - mqtt
+
+volumes:
+  app-volume:
