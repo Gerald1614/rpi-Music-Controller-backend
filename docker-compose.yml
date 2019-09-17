@@ -31,6 +31,8 @@ services:
     build: ../rpi_client_audio
     ports:
       - "5000:5000"
+    env_file:
+      - .env
     volumes:
       - app-volume:/usr/app/appdata
     environment:

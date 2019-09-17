@@ -28,6 +28,7 @@ def cc_action(payload):
         mc.play_media(payload["desc"], "audio/mp3")
         time.sleep(2)
         mc.play()
+        time.sleep(1)
         print("=> Playing {0}" .format(cast.media_controller.status))
     elif payload["action"] == "volume":
         print("=> Change volume to "+ str(payload["desc"]))
