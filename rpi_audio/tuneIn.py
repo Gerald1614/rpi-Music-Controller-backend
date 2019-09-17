@@ -25,10 +25,13 @@ mc = cast.media_controller
 
 def cc_action(payload):
     if payload["action"] == "play":
+        if cast.media_controller.status.content_id ==  "http://192.168.2.23:5000/output.mp3":
+            time.sleep(cast.media_controller.status.duration)
         mc.play_media(payload["desc"], "audio/mp3")
-        time.sleep(2)
-        mc.play()
+        mc.block_until_active()
+        mc.pause()
         time.sleep(1)
+        mc.play()
         print("=> Playing {0}" .format(cast.media_controller.status))
     elif payload["action"] == "volume":
         print("=> Change volume to "+ str(payload["desc"]))
