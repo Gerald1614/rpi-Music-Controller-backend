@@ -1,27 +1,26 @@
 version: "3.4"
 services:
-  mqtt:
-    image: eclipse-mosquitto:latest
-    container_name: mqtt
-    restart: always
-    expose:
-      - 1883
-    ports:
-      - "1883:1883"
-    volumes:
-      - /opt/conf/mqtt/data:/mosquitto/data
-      - /opt/conf/mqtt/log:/mosquitto/log
+  # mqtt:
+  #   image: eclipse-mosquitto:latest
+  #   container_name: mqtt
+  #   restart: always
+  #   expose:
+  #     - 1883
+  #   ports:
+  #     - "1883:1883"
+  #   volumes:
+  #     - /opt/conf/mqtt/data:/mosquitto/data
+  #     - /opt/conf/mqtt/log:/mosquitto/log
 
   audio_server:
     container_name: audio_server
     restart: always
     build: ./rpi_audio
     command: python -u ./tuneIn.py
-    # network_mode: host
-    depends_on:
-      - mqtt
-    links:
-      - mqtt
+    # depends_on:
+    #   - mqtt
+    # links:
+    #   - mqtt
 
   audio_client:
     privileged: true
@@ -39,8 +38,12 @@ services:
       - GOOGLE_APPLICATION_CREDENTIALS=/usr/app/MyProject59764-56e9a84a15e8.json
     depends_on:
       - audio_server
-    links:
-      - mqtt
+    # links:
+    #   - mqtt
 
 volumes:
   app-volume:
+networks:
+  default:
+    external:
+      name: sensor_monit_monitoring
